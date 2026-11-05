@@ -5,81 +5,437 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flexi Educational Consult - Print your Free JAMB Form exam pass</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <style>
         :root {
-            --primary-color: #16a34a; --primary-hover: #15803d;
-            --bg-start: #f0fdf4; --bg-end: #dcfce7; --text-dark: #1e293b;
-            --text-muted: #64748b; --border-color: #cbd5e1; --card-bg: #ffffff;
-            --error-bg: #fef2f2; --error-text: #b91c1c; --info-bg: #eff6ff;
-            --info-text: #1e40af; --locked-bg: #fff7ed; --locked-text: #c2410c;
+            --primary-color: #16a34a;
+            --primary-hover: #15803d;
+            --bg-start: #f0fdf4;
+            --bg-end: #dcfce7;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --card-bg: #ffffff;
+            --error-bg: #fef2f2;
+            --error-text: #b91c1c;
+            --info-bg: #eff6ff;
+            --info-text: #1e40af;
+            --locked-bg: #fff7ed;
+            --locked-text: #c2410c;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
-        body { background: linear-gradient(135deg, var(--bg-start), var(--bg-end)); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 520px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.1); overflow: hidden; border: 1px solid rgba(0,0,0,.05); }
-        .header { background: linear-gradient(135deg,var(--primary-color),var(--primary-hover)); color: #fff; padding: 24px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .header img.logo-img { width: 75px; height: 75px; object-fit: cover; border-radius: 50%; background: #fff; padding: 3px; box-shadow: 0 4px 6px -1px rgba(0,0,0,.1); }
-        .logo-loader { animation: zoomPulse 1.2s infinite ease-in-out; }
-        @keyframes zoomPulse { 0% {transform:scale(.85);opacity:.7} 50% {transform:scale(1.15);opacity:1} 100% {transform:scale(.85);opacity:.7} }
-        .header h1 { font-size: 1.4rem; font-weight: 700; } .header p { font-size: .85rem; opacity: .9; }
-        .portal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; }
-        .form-group label { font-size: .875rem; font-weight: 600; color: var(--text-dark); }
-        .form-group input { width: 100%; padding: 10px 14px; font-size: .95rem; border: 1px solid var(--border-color); border-radius: 8px; outline: none; transition: border-color .2s,box-shadow .2s; color: var(--text-dark); background: #fff; }
-        .form-group input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
-        .form-group input:disabled { background: #f1f5f9; cursor: not-allowed; }
-        .action-btn { width: 100%; background: var(--primary-color); color: #fff; font-size: 1rem; font-weight: 600; padding: 12px; border: 0; border-radius: 8px; cursor: pointer; transition: background-color .2s; }
-        .action-btn:hover { background: var(--primary-hover); } .action-btn:disabled { opacity: .7; cursor: not-allowed; background: #94a3b8; }
-        .alert { padding: 12px 16px; border-radius: 8px; font-size: .875rem; font-weight: 500; display: none; }
-        .alert.error { display:block; background:var(--error-bg); color:var(--error-text); border:1px solid rgba(185,28,28,.2); }
-        .alert.locked { display:block; background:var(--locked-bg); color:var(--locked-text); border:1px solid rgba(194,65,12,.2); text-align:center; }
-        .pass-card { display:none; background:#fff; border:1px solid var(--border-color); border-radius:12px; padding:18px; box-shadow:0 4px 6px -1px rgba(0,0,0,.05); margin-top:10px; }
-        .pass-card-header { border-bottom:2px solid var(--bg-start); padding-bottom:10px; margin-bottom:12px; text-align:center; }
-        .pass-card-header h3 { color:var(--primary-color); font-size:1.1rem; } .pass-card-header p { font-size:.8rem; color:var(--text-muted); }
-        .pass-details { display:flex; flex-direction:column; gap:8px; font-size:.9rem; margin-bottom:16px; }
-        .pass-row { display:flex; justify-content:space-between; border-bottom:1px dashed #e2e8f0; padding-bottom:6px; }
-        .pass-row span.label { color:var(--text-muted); font-weight:500; } .pass-row span.value { color:var(--text-dark); font-weight:700; text-align:right; }
-        .batch-highlight { background:#f0fdf4; color:#15803d !important; padding:2px 6px; border-radius:4px; }
-        .support-notice { background:var(--info-bg); color:var(--info-text); padding:10px 14px; border-radius:8px; font-size:.8rem; text-align:center; border:1px solid rgba(30,64,175,.15); }
-        .support-notice a { color:var(--info-text); font-weight:700; text-decoration:underline; }
-        .footer { padding:14px 24px; background:#f8fafc; border-top:1px solid #f1f5f9; text-align:center; }
-        .footer p { font-size:.75rem; color:var(--text-muted); }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,.1),
+                        0 8px 10px -6px rgba(0,0,0,.1);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,.05);
+        }
+
+        .header {
+            background: linear-gradient(
+                135deg,
+                var(--primary-color),
+                var(--primary-hover)
+            );
+            color: #fff;
+            padding: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header img.logo-img {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 50%;
+            background: #fff;
+            padding: 3px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+        }
+
+        .logo-loader {
+            animation: zoomPulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes zoomPulse {
+            0% { transform: scale(.85); opacity: .7; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(.85); opacity: .7; }
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: .85rem;
+            opacity: .9;
+        }
+
+        .portal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: .875rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: .95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+            color: var(--text-dark);
+            background: #fff;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+        }
+
+        .form-group input:disabled {
+            background: #f1f5f9;
+            cursor: not-allowed;
+        }
+
+        .action-btn {
+            width: 100%;
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color .2s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .action-btn:disabled {
+            opacity: .7;
+            cursor: not-allowed;
+            background: #94a3b8;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: .875rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert.error {
+            display: block;
+            background: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid rgba(185,28,28,.2);
+        }
+
+        .alert.locked {
+            display: block;
+            background: var(--locked-bg);
+            color: var(--locked-text);
+            border: 1px solid rgba(194,65,12,.2);
+            text-align: center;
+        }
+
+        .pass-card {
+            display: none;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,.05);
+            margin-top: 10px;
+        }
+
+        .pass-card-header {
+            border-bottom: 2px solid var(--bg-start);
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .pass-card-header h3 {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .pass-card-header p {
+            font-size: .8rem;
+            color: var(--text-muted);
+        }
+
+        .pass-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: .9rem;
+            margin-bottom: 16px;
+        }
+
+        .pass-row {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 6px;
+            gap: 10px;
+        }
+
+        .pass-row span.label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .pass-row span.value {
+            color: var(--text-dark);
+            font-weight: 700;
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .batch-highlight {
+            background: #f0fdf4;
+            color: #15803d !important;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .support-notice {
+            background: var(--info-bg);
+            color: var(--info-text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: .8rem;
+            text-align: center;
+            border: 1px solid rgba(30,64,175,.15);
+        }
+
+        .support-notice a {
+            color: var(--info-text);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .footer {
+            padding: 14px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #f1f5f9;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+            .container {
+                margin: 10px auto;
+            }
+
+            .portal-body {
+                padding: 18px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .pass-row {
+                font-size: .82rem;
+            }
+        }
     </style>
 </head>
+
 <body>
+
 <div class="container">
+
     <div class="header">
-        <img id="portalLogo" class="logo-img" src="https://i.postimg.cc/0Qm3PLw5/1771700279759-2.jpg" alt="Flexi Educational Consult Logo" crossorigin="anonymous">
-        <h1>Flexi Educational Consult</h1><p>Screening Exam Pass Portal</p>
+        <img
+            id="portalLogo"
+            class="logo-img"
+            src="https://i.postimg.cc/0Qm3PLw5/1771700279759-2.jpg"
+            alt="Flexi Educational Consult Logo"
+            crossorigin="anonymous"
+        >
+
+        <h1>Flexi Educational Consult</h1>
+        <p>Screening Exam Pass Portal</p>
     </div>
+
     <div class="portal-body">
+
         <div id="alertBox" class="alert"></div>
+
         <form id="searchForm">
+
             <div class="form-group">
-                <label for="searchQuery">Registration No. or WhatsApp No.</label>
-                <input type="text" id="searchQuery" required placeholder="Enter Reg No (e.g. 8394...) or WhatsApp No">
+                <label for="searchQuery">
+                    Registration No. or WhatsApp No.
+                </label>
+
+                <input
+                    type="text"
+                    id="searchQuery"
+                    required
+                    placeholder="Enter Reg No (e.g. 8394...) or WhatsApp No"
+                >
             </div>
-            <button type="submit" id="searchBtn" class="action-btn" style="margin-top:12px">Retrieve Exam Pass</button>
+
+            <button
+                type="submit"
+                id="searchBtn"
+                class="action-btn"
+                style="margin-top:12px"
+            >
+                Retrieve Exam Pass
+            </button>
+
         </form>
+
         <div id="passCard" class="pass-card">
-            <div class="pass-card-header"><h3>EXAMINATION SCHEDULE PASS</h3><p>Free JAMB Form Initiative 2026</p></div>
-            <div class="pass-details">
-                <div class="pass-row"><span class="label">Candidate Name:</span><span id="prevName" class="value">-</span></div>
-                <div class="pass-row"><span class="label">Registration No:</span><span id="prevRegNo" class="value">-</span></div>
-                <div class="pass-row"><span class="label">Exam Date:</span><span id="prevDate" class="value">-</span></div>
-                <div class="pass-row"><span class="label">Assigned Batch:</span><span id="prevBatch" class="value batch-highlight">-</span></div>
-                <div class="pass-row"><span class="label">Scheduled Time:</span><span id="prevTime" class="value batch-highlight">-</span></div>
-                <div class="pass-row"><span class="label">Course of Study:</span><span id="prevCourse" class="value">-</span></div>
-                <div class="pass-row"><span class="label">Choice Institution:</span><span id="prevInst" class="value">-</span></div>
+
+            <div class="pass-card-header">
+                <h3>EXAMINATION SCHEDULE PASS</h3>
+                <p>Free JAMB Form Initiative 2026</p>
             </div>
-            <button type="button" id="printPdfBtn" class="action-btn">Print / Download PDF Pass</button>
+
+            <div class="pass-details">
+
+                <div class="pass-row">
+                    <span class="label">Candidate Name:</span>
+                    <span id="prevName" class="value">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Registration No:</span>
+                    <span id="prevRegNo" class="value">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Exam Date:</span>
+                    <span id="prevDate" class="value">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Assigned Batch:</span>
+                    <span id="prevBatch" class="value batch-highlight">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Scheduled Time:</span>
+                    <span id="prevTime" class="value batch-highlight">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Course of Study:</span>
+                    <span id="prevCourse" class="value">-</span>
+                </div>
+
+                <div class="pass-row">
+                    <span class="label">Choice Institution:</span>
+                    <span id="prevInst" class="value">-</span>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                id="printPdfBtn"
+                class="action-btn"
+            >
+                Print / Download PDF Pass
+            </button>
+
         </div>
-        <div class="support-notice">Having issues retrieving your pass? Contact support: <br><a href="mailto:support@flexieduconsult.com.ng">support@flexieduconsult.com.ng</a></div>
+
+        <div class="support-notice">
+            Having issues retrieving your pass? Contact support:
+            <br>
+            <a href="mailto:support@flexieduconsult.com.ng">
+                support@flexieduconsult.com.ng
+            </a>
+        </div>
+
     </div>
-    <div class="footer"><p>&copy; Flexi Educational Consult. All rights reserved.</p></div>
+
+    <div class="footer">
+        <p>&copy; Flexi Educational Consult. All rights reserved.</p>
+    </div>
+
 </div>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    query,
+    where,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+
+/* =========================================
+   FIREBASE CONFIGURATION
+========================================= */
 
 const firebaseConfig = {
     apiKey: "AIzaSyDfS0TufUE0eAOHUBprVUmHOYC5BccRTMA",
@@ -89,9 +445,17 @@ const firebaseConfig = {
     messagingSenderId: "301438259098",
     appId: "1:301438259098:web:ed88f5b17638ee12a8b423"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+
+/* =========================================
+   PORTAL CONFIGURATION
+========================================= */
+
 const CONSULT_WEBSITE = "https://flexieduconsult.com.ng";
+
 const portalLogo = document.getElementById("portalLogo");
 const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchQuery");
@@ -99,153 +463,543 @@ const searchBtn = document.getElementById("searchBtn");
 const alertBox = document.getElementById("alertBox");
 const passCard = document.getElementById("passCard");
 const printPdfBtn = document.getElementById("printPdfBtn");
+
 const PORTAL_OPEN_DATE = new Date("2026-11-02T00:00:00Z");
+
 let activeCandidate = null;
 
-function showAlert(msg, type) { alertBox.className = "alert " + type; alertBox.textContent = msg; }
-function clearAlert() { alertBox.className = "alert"; alertBox.textContent = ""; }
-function toggleLoading(loading) {
-    if (loading) { portalLogo.classList.add("logo-loader"); searchBtn.disabled = true; searchBtn.textContent = "Searching..."; }
-    else { portalLogo.classList.remove("logo-loader"); searchBtn.disabled = false; searchBtn.textContent = "Retrieve Exam Pass"; }
+
+/* =========================================
+   ALERTS AND LOADING
+========================================= */
+
+function showAlert(msg, type) {
+    alertBox.className = "alert " + type;
+    alertBox.textContent = msg;
 }
+
+function clearAlert() {
+    alertBox.className = "alert";
+    alertBox.textContent = "";
+}
+
+function toggleLoading(loading) {
+
+    if (loading) {
+        portalLogo.classList.add("logo-loader");
+        searchBtn.disabled = true;
+        searchBtn.textContent = "Searching...";
+    } else {
+        portalLogo.classList.remove("logo-loader");
+        searchBtn.disabled = false;
+        searchBtn.textContent = "Retrieve Exam Pass";
+    }
+
+}
+
+
+/* =========================================
+   PORTAL AVAILABILITY
+========================================= */
+
 function checkPortalAvailability() {
+
     if (new Date() < PORTAL_OPEN_DATE) {
-        showAlert("Exam Pass Retrieval Portal will be available starting 2nd November 2026.", "locked");
-        searchInput.disabled = true; searchBtn.disabled = true; searchBtn.textContent = "Portal Locked Until Nov 2, 2026";
+
+        showAlert(
+            "Exam Pass Retrieval Portal will be available starting 2nd November 2026.",
+            "locked"
+        );
+
+        searchInput.disabled = true;
+        searchBtn.disabled = true;
+
+        searchBtn.textContent = "Portal Locked Until Nov 2, 2026";
+
         return false;
     }
+
     return true;
 }
+
+
+/* =========================================
+   EXAM DATE FORMATTING
+========================================= */
+
 function formatExamDate(dateString) {
-    if (dateString !== "2026-11-28") return dateString || "28th November, 2026";
+
+    if (dateString !== "2026-11-28") {
+        return dateString || "28th November, 2026";
+    }
+
     return "Saturday, 28th November, 2026";
 }
+
+
+/* =========================================
+   LOGO IMAGE FOR PDF
+========================================= */
+
 function getBase64CircularImage(imgEl) {
+
     try {
-        const canvas = document.createElement("canvas"), size = 150;
-        canvas.width = size; canvas.height = size;
+
+        const canvas = document.createElement("canvas");
+        const size = 150;
+
+        canvas.width = size;
+        canvas.height = size;
+
         const ctx = canvas.getContext("2d");
-        ctx.beginPath(); ctx.arc(size/2,size/2,size/2,0,Math.PI*2); ctx.closePath(); ctx.clip();
-        ctx.drawImage(imgEl,0,0,size,size); return canvas.toDataURL("image/png");
-    } catch (err) { return null; }
+
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+
+        ctx.drawImage(imgEl, 0, 0, size, size);
+
+        return canvas.toDataURL("image/png");
+
+    } catch (err) {
+
+        return null;
+
+    }
+
 }
+
+
+/* =========================================
+   QR CODE GENERATION
+========================================= */
+
 function fetchQrCodeBase64(url) {
+
     return new Promise(resolve => {
-        const img = new Image(); img.crossOrigin = "anonymous";
+
+        const img = new Image();
+
+        img.crossOrigin = "anonymous";
+
         img.onload = () => {
-            const canvas = document.createElement("canvas"); canvas.width=img.width; canvas.height=img.height;
-            canvas.getContext("2d").drawImage(img,0,0); resolve(canvas.toDataURL("image/png"));
+
+            const canvas = document.createElement("canvas");
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            canvas.getContext("2d").drawImage(img, 0, 0);
+
+            resolve(canvas.toDataURL("image/png"));
+
         };
+
         img.onerror = () => resolve(null);
-        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+
+        img.src =
+            `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(url)}`;
+
     });
+
 }
+
+
+/* =========================================
+   INITIALIZE PORTAL
+========================================= */
+
 checkPortalAvailability();
 
+
+/* =========================================
+   RETRIEVE CANDIDATE AND SAVED SCHEDULE
+========================================= */
+
 searchForm.addEventListener("submit", async e => {
+
     e.preventDefault();
+
     if (!checkPortalAvailability()) return;
-    clearAlert(); passCard.style.display = "none"; activeCandidate = null;
+
+    clearAlert();
+
+    passCard.style.display = "none";
+    activeCandidate = null;
+
     const input = searchInput.value.trim();
+
     if (!input) return;
+
     toggleLoading(true);
+
     try {
+
         const ref = collection(db, "jamb_registrations");
-        const qPhone = query(ref, where("whatsappNumber","==",input));
-        const qReg = query(ref, where("registrationNumber","==",input));
-        const [phoneSnap, regSnap] = await Promise.all([getDocs(qPhone),getDocs(qReg)]);
+
+        const qPhone = query(
+            ref,
+            where("whatsappNumber", "==", input)
+        );
+
+        const qReg = query(
+            ref,
+            where("registrationNumber", "==", input)
+        );
+
+        const [phoneSnap, regSnap] = await Promise.all([
+            getDocs(qPhone),
+            getDocs(qReg)
+        ]);
+
         let candidate = null;
-        if (!phoneSnap.empty) candidate = phoneSnap.docs[0].data();
-        else if (!regSnap.empty) candidate = regSnap.docs[0].data();
+
+        if (!phoneSnap.empty) {
+
+            candidate = phoneSnap.docs[0].data();
+
+        } else if (!regSnap.empty) {
+
+            candidate = regSnap.docs[0].data();
+
+        }
+
+
+        /* Candidate not found */
 
         if (!candidate) {
-            showAlert("No record found for this WhatsApp or Registration number. Please verify your details or contact support.","error");
+
+            showAlert(
+                "No record found for this WhatsApp or Registration number. Please verify your details or contact support.",
+                "error"
+            );
+
             return;
         }
+
+
+        /* =========================================
+           IMPORTANT:
+           READ THE SAVED FIRESTORE SCHEDULE.
+           DO NOT CALCULATE OR REASSIGN A BATCH.
+        ========================================= */
+
         const schedule = candidate.examSchedule;
-        if (!schedule || !schedule.batch || !schedule.time || !schedule.examDate) {
-            showAlert("Your examination schedule is being prepared. Please check again later or contact support@flexieduconsult.com.ng. The portal will not calculate or change your assigned batch.","error");
+
+
+        if (
+            !schedule ||
+            !schedule.batch ||
+            !schedule.time ||
+            !schedule.examDate
+        ) {
+
+            showAlert(
+                "Your examination schedule is being prepared. Please check again later or contact support@flexieduconsult.com.ng. The portal will not calculate or change your assigned batch.",
+                "error"
+            );
+
             return;
         }
+
+
+        /* =========================================
+           USE THE SAVED SCHEDULE AS-IS
+        ========================================= */
+
         activeCandidate = {
             ...candidate,
+
             batch: schedule.batch,
+
             time: schedule.time,
+
             examDate: schedule.examDate,
+
             timeZone: schedule.timeZone || "Africa/Lagos"
         };
-        document.getElementById("prevName").textContent = activeCandidate.fullName || "-";
-        document.getElementById("prevRegNo").textContent = activeCandidate.registrationNumber || "-";
-        document.getElementById("prevDate").textContent = formatExamDate(activeCandidate.examDate);
-        document.getElementById("prevBatch").textContent = activeCandidate.batch;
-        document.getElementById("prevTime").textContent = activeCandidate.time;
-        document.getElementById("prevCourse").textContent = activeCandidate.courseOfStudy || "-";
-        document.getElementById("prevInst").textContent = activeCandidate.choiceOfInstitution || "-";
+
+
+        /* =========================================
+           DISPLAY CANDIDATE DETAILS
+        ========================================= */
+
+        document.getElementById("prevName").textContent =
+            activeCandidate.fullName || "-";
+
+        document.getElementById("prevRegNo").textContent =
+            activeCandidate.registrationNumber || "-";
+
+        document.getElementById("prevDate").textContent =
+            formatExamDate(activeCandidate.examDate);
+
+        document.getElementById("prevBatch").textContent =
+            activeCandidate.batch;
+
+        document.getElementById("prevTime").textContent =
+            activeCandidate.time;
+
+        document.getElementById("prevCourse").textContent =
+            activeCandidate.courseOfStudy || "-";
+
+        document.getElementById("prevInst").textContent =
+            activeCandidate.choiceOfInstitution || "-";
+
+
         passCard.style.display = "block";
+
     } catch (err) {
-        console.error("Search Error:",err);
-        showAlert("Unable to query database right now. Please try again or reach out to support@flexieduconsult.com.ng","error");
+
+        console.error("Search Error:", err);
+
+        showAlert(
+            "Unable to query database right now. Please try again or reach out to support@flexieduconsult.com.ng",
+            "error"
+        );
+
     } finally {
-        if (new Date() >= PORTAL_OPEN_DATE) toggleLoading(false);
+
+        if (new Date() >= PORTAL_OPEN_DATE) {
+            toggleLoading(false);
+        }
+
     }
+
 });
 
+
+/* =========================================
+   GENERATE PDF EXAM PASS
+========================================= */
+
 printPdfBtn.addEventListener("click", async () => {
+
     if (!activeCandidate) return;
+
     const { jsPDF } = window.jspdf;
+
     const doc = new jsPDF();
-    doc.setFillColor(22,163,74); doc.rect(0,0,210,42,"F");
+
+
+    /* HEADER */
+
+    doc.setFillColor(22, 163, 74);
+    doc.rect(0, 0, 210, 42, "F");
+
     const logo = getBase64CircularImage(portalLogo);
-    if (logo) { doc.setFillColor(255,255,255); doc.circle(25,21,14,"F"); doc.addImage(logo,"PNG",11,7,28,28); }
-    doc.setTextColor(255,255,255); doc.setFontSize(18); doc.setFont("helvetica","bold");
-    doc.text("FLEXI EDUCATIONAL CONSULT",120,18,{align:"center"});
-    doc.setFontSize(11); doc.setFont("helvetica","normal");
-    doc.text("Free JAMB Form Initiative - Official Exam Pass",120,28,{align:"center"});
-    doc.setFillColor(240,253,244); doc.rect(15,52,180,12,"F");
-    doc.setFontSize(11); doc.setFont("helvetica","bold"); doc.setTextColor(21,128,61);
-    doc.text("EXAMINATION SCHEDULE DETAILS",20,60);
-    const fields = [
-        ["Registration No:",activeCandidate.registrationNumber],
-        ["Full Name:",activeCandidate.fullName],
-        ["WhatsApp No:",activeCandidate.whatsappNumber],
-        ["Course / Program:",activeCandidate.courseOfStudy],
-        ["Choice Institution:",activeCandidate.choiceOfInstitution],
-        ["Exam Date:",formatExamDate(activeCandidate.examDate)],
-        ["Assigned Batch:",`${activeCandidate.batch} (${activeCandidate.time})`]
-    ];
-    let y=76; doc.setFontSize(10);
-    fields.forEach(([label,value]) => {
-        doc.setFont("helvetica","bold"); doc.setTextColor(100,116,139); doc.text(label,20,y);
-        doc.setFont("helvetica","bold");
-        if (label.includes("Batch") || label.includes("Exam Date")) doc.setTextColor(22,163,74);
-        else doc.setTextColor(30,41,59);
-        doc.text(String(value || "-"),75,y); doc.setDrawColor(241,245,249); doc.line(20,y+3,190,y+3); y+=11;
-    });
-    y+=6; doc.setFillColor(248,250,252); doc.rect(15,y,180,8,"F");
-    doc.setFontSize(10); doc.setFont("helvetica","bold"); doc.setTextColor(30,41,59);
-    doc.text("IMPORTANT CANDIDATE INSTRUCTIONS",20,y+5.5); y+=14;
-    const instructions = [
-        "1. Candidates must join the CBT exam portal strictly at their assigned batch time slot.",
-        "2. Ensure device battery is fully charged with sufficient mobile data connection.",
-        "3. Keep this PDF pass ready as proof of screening registration.",
-        "4. Credentials and portal access links will be sent directly to your registered WhatsApp number.",
-        "5. Support Contact: support@flexieduconsult.com.ng"
-    ];
-    doc.setFontSize(9); doc.setFont("helvetica","normal"); doc.setTextColor(71,85,105);
-    instructions.forEach(line => { doc.text(line,20,y); y+=7; });
-    y+=4;
-    const qr = await fetchQrCodeBase64(CONSULT_WEBSITE);
-    if (qr) {
-        const size=24,x=164;
-        doc.addImage(qr,"PNG",x,y,size,size); doc.link(x,y,size,size,{url:CONSULT_WEBSITE});
-        doc.setFontSize(7); doc.setFont("helvetica","bold"); doc.setTextColor(22,163,74);
-        doc.text("VERIFY ONLINE",x+size/2,y+size+4,{align:"center"});
+
+    if (logo) {
+
+        doc.setFillColor(255, 255, 255);
+        doc.circle(25, 21, 14, "F");
+
+        doc.addImage(logo, "PNG", 11, 7, 28, 28);
+
     }
-    doc.setDrawColor(203,213,225); doc.line(15,270,195,270);
-    doc.setFontSize(8); doc.setFont("helvetica","italic"); doc.setTextColor(148,163,184);
-    doc.text("Official Exam Pass - Flexi Educational Consult (support@flexieduconsult.com.ng)",105,276,{align:"center"});
-    doc.save(`Flexi_Exam_Pass_${String(activeCandidate.fullName || "Candidate").replace(/\s+/g,"_")}.pdf`);
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+
+    doc.text(
+        "FLEXI EDUCATIONAL CONSULT",
+        120,
+        18,
+        { align: "center" }
+    );
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+
+    doc.text(
+        "Free JAMB Form Initiative - Official Exam Pass",
+        120,
+        28,
+        { align: "center" }
+    );
+
+
+    /* SCHEDULE SECTION */
+
+    doc.setFillColor(240, 253, 244);
+    doc.rect(15, 52, 180, 12, "F");
+
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(21, 128, 61);
+
+    doc.text(
+        "EXAMINATION SCHEDULE DETAILS",
+        20,
+        60
+    );
+
+
+    /* CANDIDATE DETAILS */
+
+    const fields = [
+
+        ["Registration No:", activeCandidate.registrationNumber],
+
+        ["Full Name:", activeCandidate.fullName],
+
+        ["WhatsApp No:", activeCandidate.whatsappNumber],
+
+        ["Course / Program:", activeCandidate.courseOfStudy],
+
+        ["Choice Institution:", activeCandidate.choiceOfInstitution],
+
+        ["Exam Date:", formatExamDate(activeCandidate.examDate)],
+
+        ["Assigned Batch:", `${activeCandidate.batch} (${activeCandidate.time})`]
+
+    ];
+
+    let y = 76;
+
+    doc.setFontSize(10);
+
+    fields.forEach(([label, value]) => {
+
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(100, 116, 139);
+
+        doc.text(label, 20, y);
+
+        doc.setFont("helvetica", "bold");
+
+        if (
+            label.includes("Batch") ||
+            label.includes("Exam Date")
+        ) {
+
+            doc.setTextColor(22, 163, 74);
+
+        } else {
+
+            doc.setTextColor(30, 41, 59);
+
+        }
+
+        doc.text(String(value || "-"), 75, y);
+
+        doc.setDrawColor(241, 245, 249);
+        doc.line(20, y + 3, 190, y + 3);
+
+        y += 11;
+
+    });
+
+
+    /* IMPORTANT INSTRUCTIONS */
+
+    y += 6;
+
+    doc.setFillColor(248, 250, 252);
+    doc.rect(15, y, 180, 8, "F");
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 41, 59);
+
+    doc.text(
+        "IMPORTANT CANDIDATE INSTRUCTIONS",
+        20,
+        y + 5.5
+    );
+
+    y += 14;
+
+
+    const instructions = [
+
+        "1. Candidates must join the CBT exam portal strictly at their assigned batch time slot.",
+
+        "2. Ensure device battery is fully charged with sufficient mobile data connection.",
+
+        "3. Keep this PDF pass ready as proof of screening registration.",
+
+        "4. Credentials and portal access links will be sent directly to your registered WhatsApp number.",
+
+        "5. Support Contact: support@flexieduconsult.com.ng"
+
+    ];
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(71, 85, 105);
+
+    instructions.forEach(line => {
+
+        doc.text(line, 20, y);
+
+        y += 7;
+
+    });
+
+
+    /* QR CODE */
+
+    y += 4;
+
+    const qr = await fetchQrCodeBase64(CONSULT_WEBSITE);
+
+    if (qr) {
+
+        const size = 24;
+        const x = 164;
+
+        doc.addImage(qr, "PNG", x, y, size, size);
+
+        doc.link(
+            x,
+            y,
+            size,
+            size,
+            { url: CONSULT_WEBSITE }
+        );
+
+        doc.setFontSize(7);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(22, 163, 74);
+
+        doc.text(
+            "VERIFY ONLINE",
+            x + size / 2,
+            y + size + 4,
+            { align: "center" }
+        );
+
+    }
+
+
+    /* FOOTER */
+
+    doc.setDrawColor(203, 213, 225);
+    doc.line(15, 270, 195, 270);
+
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(148, 163, 184);
+
+    doc.text(
+        "Official Exam Pass - Flexi Educational Consult (support@flexieduconsult.com.ng)",
+        105,
+        276,
+        { align: "center" }
+    );
+
+
+    /* SAVE PDF */
+
+    doc.save(
+        `Flexi_Exam_Pass_${String(activeCandidate.fullName || "Candidate").replace(/\s+/g, "_")}.pdf`
+    );
+
 });
+
 </script>
+
 </body>
 </html>
